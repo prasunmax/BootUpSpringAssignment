@@ -1,0 +1,77 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./Mongo/sampledata.archive.gz:/tmp/sampledata.archive.gz
+      - ./Mongo/data:/data/db
+    #command: bash -c "mongorestore --username root --password example --gzip --archive=/tmp/sampledata.archive.gz"      
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      RABBITMQ_ERLANG_COOKIE: secret_cookie
+  registry:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./ServiceRegistry
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - mongo
+    ports:
+      - 8002:8000
+    volumes:
+      - /app/target
+      - ./ServiceRegistry/src:/app/src
+  gateway:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./gateway
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - mongo
+    ports:
+      - 8003:8000
+    volumes:
+      - ./gateway/src:/app/src
+  admin:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./admin 
+      dockerfile: Dockerfile.dev     
+    ports:
+      - 8004:8000
+    volumes:
+      - ./admin/src:/app/src
+  product-catalog:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./Product-Catalog-Service 
+      dockerfile: Dockerfile.dev     
+    depends_on:
+      - mongo
+      - admin
+      - registry
+      - rabbitmq
+      - gateway
+    ports:
+      - 8000:8000
+    volumes:
+      - ./Flights/src:/app/src
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    volumes:
+        - ./rabbitmq/etc/:/etc/rabbitmq/
+        - ./rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+        - 5672:5672
+        - 5671:5671
+        - 25672:25672
+        - 4369:4369
+        - 15671:15671
+        - 15672:15672
