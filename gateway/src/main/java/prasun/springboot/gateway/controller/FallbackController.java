@@ -13,9 +13,9 @@ public class FallbackController {
 		return Mono.just("Airline service is taking too long to respond or is down. Please try again later.");
 	}
 	
-	@RequestMapping("/flightFallback")
+	@RequestMapping("/productFallback")
 	public Mono<String> flightFallback(){
-		return Mono.just("Flight service is taking too long to respond or is down. Please try again later.");
+		return Mono.just("Product service is taking too long to respond or is down. Please try again later.");
 	}
 
 }
