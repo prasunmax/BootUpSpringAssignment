@@ -81,7 +81,7 @@ services:
       - rabbitmq
       - gateway
     ports:
-      - 8005:8000
+      - 7000:8000
     volumes:
       - ./ProductCataLogService/src:/app/src
   price:

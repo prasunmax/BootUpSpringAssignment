@@ -4,3 +4,7 @@ spring:
       uri: http://config-server:8000
   application:
     name: config-service
+    
+management:
+  security:
+    enabled: false 

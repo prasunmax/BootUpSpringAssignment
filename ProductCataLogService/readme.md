@@ -17,3 +17,9 @@ Remove the following
 	<artifactId>spring-boot-starter-data-mongodb</artifactId>
 </dependency>
 
+
+This should be at the last
+<dependency>
+	<groupId>org.springframework.data</groupId>
+	<artifactId>spring-data-mongodb</artifactId>
+</dependency>
