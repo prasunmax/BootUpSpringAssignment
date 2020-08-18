@@ -9,7 +9,7 @@ hibernate:
   ogm:
     datastore:
       database: productAssignment
-      
+
 management:
   security:
     enabled: false 

@@ -16,6 +16,8 @@ server:
 spring:
   application:
     name: product-catalog-service
+
+
 eureka:
   client:
     register-with-eureka: true
