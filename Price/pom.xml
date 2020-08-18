@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>prasun.springboot</groupId>
-	<artifactId>ProductCataLogService</artifactId>
+	<artifactId>Price</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ProductCataLogService</name>
-	<description>SpringBoot Assignment - Product Catalog</description>
+	<name>Price</name>
+	<description>Price Service</description>
 
 	<properties>
 		<java.version>11</java.version>

@@ -3,12 +3,13 @@ spring:
     config:      
       uri: http://config-server:8000
   application:
-    name: product-catalog-service
+    name: price-service
 
 hibernate:
   ogm:
     datastore:
-      database: productAssignment
+      database: priceAssignment
+      
 management:
   security:
     enabled: false 

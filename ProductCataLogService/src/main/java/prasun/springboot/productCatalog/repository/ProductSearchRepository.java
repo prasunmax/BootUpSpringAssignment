@@ -21,7 +21,7 @@ public class ProductSearchRepository {
 	}
 
 	public List<Product> findAll() {
-		return entityManager.createQuery("select r from Review r", Product.class).getResultList();
+		return entityManager.createQuery("select p from Product p", Product.class).getResultList();
 	}
 
 	public Product queryByProductId(int productId) {

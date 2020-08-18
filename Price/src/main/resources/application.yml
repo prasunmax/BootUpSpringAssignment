@@ -2,7 +2,7 @@ hibernate:
   ogm:
     datastore:
       create_database: true
-      database: productAssignment
+      database: priceAssignment
       host: localhost
       password: example
       port: 27017
@@ -15,9 +15,7 @@ server:
 
 spring:
   application:
-    name: product-catalog-service
-
-
+    name: price-service
 eureka:
   client:
     register-with-eureka: true

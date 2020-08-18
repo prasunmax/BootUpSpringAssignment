@@ -84,6 +84,21 @@ services:
       - 8005:8000
     volumes:
       - ./ProductCataLogService/src:/app/src
+  price:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./Price 
+      dockerfile: Dockerfile.dev     
+    depends_on:
+      - mongo
+      - admin
+      - registry
+      - rabbitmq
+      - gateway
+    ports:
+      - 7001:8000
+    volumes:
+      - ./Price/src:/app/src
   front-end:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
