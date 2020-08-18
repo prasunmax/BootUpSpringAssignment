@@ -41,6 +41,7 @@ services:
     volumes:
       - /app/target
       - ./ServiceRegistry/src:/app/src
+      - ./logs:/app/logs
   config-server:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
@@ -51,6 +52,7 @@ services:
     volumes:
       - /app/target
       - ./configServer/src:/app/src
+      - ./logs:/app/logs
   gateway:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
@@ -60,6 +62,7 @@ services:
       - 8003:8000
     volumes:
       - ./gateway/src:/app/src
+      - ./logs:/app/logs
   admin:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
@@ -69,6 +72,7 @@ services:
       - 8004:8000
     volumes:
       - ./admin/src:/app/src
+      - ./logs:/app/logs
   product-catalog:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
@@ -81,9 +85,26 @@ services:
       - rabbitmq
       - gateway
     ports:
-      - 8005:8000
+      - 7000:8000
     volumes:
       - ./ProductCataLogService/src:/app/src
+      - ./logs:/app/logs
+  price:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./Price 
+      dockerfile: Dockerfile.dev     
+    depends_on:
+      - mongo
+      - admin
+      - registry
+      - rabbitmq
+      - gateway
+    ports:
+      - 7001:8000
+    volumes:
+      - ./Price/src:/app/src
+      - ./logs:/app/logs
   front-end:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.

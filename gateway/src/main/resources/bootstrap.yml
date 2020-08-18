@@ -4,3 +4,6 @@ spring:
       uri: http://config-server:8000
   application:
     name: gateway-service
+management:
+  security:
+    enabled: false 

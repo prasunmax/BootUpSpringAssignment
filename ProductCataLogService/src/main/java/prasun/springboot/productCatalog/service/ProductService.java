@@ -1,7 +1,9 @@
 package prasun.springboot.productCatalog.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +22,13 @@ public class ProductService {
 
 	private ProductRepository saveRepo;
 	private ProductSearchRepository searchRepo;
+	private SenderService sender;
 
 	@Autowired
-	public ProductService(ProductRepository saveRepo, ProductSearchRepository searchRepo) {
+	public ProductService(ProductRepository saveRepo, ProductSearchRepository searchRepo, SenderService sender) {
 		this.saveRepo = saveRepo;
 		this.searchRepo = searchRepo;
+		this.sender = sender;
 	}
 
 	public ProductListVO findAll() {
@@ -39,7 +43,7 @@ public class ProductService {
 		log.info("Finding by Product id" + productId);
 		return searchRepo.queryByProductId(productId);
 	}
-	
+
 	public ProductVO queryByProductId(int productId) {
 		log.info("Finding by Product id" + productId);
 		return new ProductVO(searchRepo.queryByProductId(productId));
@@ -50,12 +54,28 @@ public class ProductService {
 	}
 
 	public ProductVO save(Product product) {
-		return new ProductVO(saveRepo.save(product));
+		ProductVO productVO = new ProductVO(saveRepo.save(product));
+		Map<String, Double> hashMap = new HashMap<String, Double>();
+		hashMap.put("price", productVO.getPrice());
+		hashMap.put("product_id", Double.valueOf(productVO.getId()));
+		hashMap.put("quantity", Double.valueOf(productVO.getQuantity()));
+		sender.send(hashMap);
+
+		return productVO;
 	}
 
 	public ProductListVO saveAll(List<Product> products) {
 		List<ProductVO> lists = new ArrayList<ProductVO>();
 		saveRepo.saveAll(products).forEach(product -> lists.add(new ProductVO(product)));
 		return new ProductListVO(lists);
+	}
+
+	public void sendProductDetails(Integer productId) {
+		Product product = getProductByProductId(productId);
+		Map<String, Double> hashMap = new HashMap<String, Double>();
+		hashMap.put("price", product.getPrice());
+		hashMap.put("product_id", Double.valueOf(product.get_id()));
+		hashMap.put("quantity", Double.valueOf(product.getQuantity() == 0 ? 100 : product.getQuantity()));
+		sender.send(hashMap);
 	}
 }
