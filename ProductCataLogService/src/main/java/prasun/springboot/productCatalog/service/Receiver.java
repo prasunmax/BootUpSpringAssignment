@@ -19,15 +19,15 @@ public class Receiver {
 
 	@Bean
 	Queue queue() {
-		return new Queue("ProductPriceQ", false);
+		return new Queue("PriceProductQ", false);
 	}
 
-	@RabbitListener(queues = "ProductPriceQ")
-	public void processMessage(Map<String, Integer> productDetails) {
+	@RabbitListener(queues = "PriceProductQ")
+	public void processMessage(Map<String, Double> productDetails) {
 		log.info("===========> ==== <===========");
 		log.info("The Product Details is asked for:" + productDetails);
 		log.info("===========> ==== <===========");
 
-		productService.sendProductDetails(productDetails.get("product_Id"));
+		productService.save(productDetails);
 	}
 }

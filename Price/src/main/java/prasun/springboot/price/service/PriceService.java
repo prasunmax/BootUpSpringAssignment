@@ -1,6 +1,7 @@
 package prasun.springboot.price.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,12 +29,15 @@ public class PriceService {
 	@Value("${microservices.endpoints.endpoint.productCatalog.products}")
 	private String templateVal;
 	private ProductServiceProxy productServiceProxy;
+	private SenderService sender;
 
 	@Autowired
-	public PriceService(PriceRepository saveRepo, PriceSearchRepository searchRepo, ProductServiceProxy productServiceProxy) {
+	public PriceService(PriceRepository saveRepo, PriceSearchRepository searchRepo,
+			ProductServiceProxy productServiceProxy, SenderService sender) {
 		this.saveRepo = saveRepo;
 		this.searchRepo = searchRepo;
 		this.productServiceProxy = productServiceProxy;
+		this.sender = sender;
 	}
 
 	public PriceListVO findAll() {
@@ -51,15 +55,16 @@ public class PriceService {
 
 	public PriceVO queryByProductId(int productId) {
 		log.info("Finding by Price id" + productId);
-		Price price = null ;
+		Price price = null;
 		try {
-			price =  searchRepo.queryByProductId(productId);
-		}catch(NoResultException nre) {
-			
+			price = searchRepo.queryByProductId(productId);
+		} catch (NoResultException nre) {
+
 		}
-		if(null == price) {
+		if (null == price) {
 			// Check if the price is present in product, then add it in the Price table
-			//ProductVO product = template.getForObject(templateVal + "/" + productId, ProductVO.class);
+			// ProductVO product = template.getForObject(templateVal + "/" + productId,
+			// ProductVO.class);
 			ProductVO product = productServiceProxy.getProduct(productId);
 			price = new Price(product);
 			price = saveRepo.save(price);
@@ -67,26 +72,26 @@ public class PriceService {
 		return new PriceVO(price);
 	}
 
-	public PriceVO save(Price price) {	
+	public PriceVO save(Price price) {
 		Price priceTemp = searchRepo.queryByProductId(price.getProduct_id());
 		if (null != priceTemp)
 			price.set_id(priceTemp.get_id());
+		PriceVO pricevo = new PriceVO(saveRepo.save(price));
+		Map<String, Double> hashMap = new HashMap<String, Double>();
+		hashMap.put("price", pricevo.getPrice());
+		hashMap.put("product_id", Double.valueOf(pricevo.getProduct_id()));
+		hashMap.put("quantity", Double.valueOf(pricevo.getQuantity()));
+		sender.send(hashMap);
 		return new PriceVO(saveRepo.save(price));
 	}
 
-	public PriceListVO saveAll(List<Price> Prices) {
-		List<PriceVO> lists = new ArrayList<PriceVO>();
-		saveRepo.saveAll(Prices).forEach(Price -> lists.add(new PriceVO(Price)));
-		return new PriceListVO(lists);
-	}
-
-	public PriceVO save(Map<String, Double> priceDetails) {
+	public void save(Map<String, Double> priceDetails) {
 		// If the product already exists then update it otherwise insert it
 		Price price = new Price(priceDetails.get("price"), priceDetails.get("product_id").intValue(),
 				priceDetails.get("quantity").intValue());
 		Price priceTemp = searchRepo.queryByProductId(priceDetails.get("product_id").intValue());
 		if (null != priceTemp)
 			price.set_id(priceTemp.get_id());
-		return new PriceVO(saveRepo.save(price));
+		saveRepo.save(price);
 	}
 }

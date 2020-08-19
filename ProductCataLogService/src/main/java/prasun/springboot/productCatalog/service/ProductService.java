@@ -80,12 +80,17 @@ public class ProductService {
 		return new ProductListVO(lists);
 	}
 
-	public void sendProductDetails(Integer productId) {
-		Product product = getProductByProductId(productId);
-		Map<String, Double> hashMap = new HashMap<String, Double>();
-		hashMap.put("price", product.getPrice());
-		hashMap.put("product_id", Double.valueOf(product.get_id()));
-		hashMap.put("quantity", Double.valueOf(product.getQuantity() == 0 ? 100 : product.getQuantity()));
-		sender.send(hashMap);
+
+	public void save(Map<String, Double> productDetails) {
+		// If the product already exists then update it otherwise insert it
+		
+		Product product = getProductByProductId(productDetails.get("product_id").intValue());
+		if(null!=product) {
+			product.setPrice(productDetails.get("price"));
+			product.setQuantity(productDetails.get("quantity").intValue());
+		}
+		saveRepo.save(product);
 	}
+
+
 }
