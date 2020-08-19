@@ -30,7 +30,8 @@ public class PriceSearchRepository {
 
 	public Price queryByProductId(int product_id) {
 		return entityManager.createQuery("select p from Price p where product_id = :product_id", Price.class)
-				.setParameter("product_id", product_id).getSingleResult();
+				.setParameter("product_id", product_id).getResultList()
+				.stream().findFirst().orElse(null);
 	}
 
 }

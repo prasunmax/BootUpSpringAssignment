@@ -53,20 +53,30 @@ public class ProductService {
 		return searchRepo.queryByProductsByName(name);
 	}
 
-	public ProductVO save(Product product) {
-		ProductVO productVO = new ProductVO(saveRepo.save(product));
+	public ProductVO save(ProductVO product) {
+		ProductVO productVO = new ProductVO(saveRepo.save(product.getFromVO()));
 		Map<String, Double> hashMap = new HashMap<String, Double>();
-		hashMap.put("price", productVO.getPrice());
+		hashMap.put("price", product.getPrice());
 		hashMap.put("product_id", Double.valueOf(productVO.getId()));
-		hashMap.put("quantity", Double.valueOf(productVO.getQuantity()));
+		hashMap.put("quantity", Double.valueOf(
+				null == product.getQuantity() || product.getQuantity() == 0.0 ? 100.0 : product.getQuantity()));
 		sender.send(hashMap);
 
 		return productVO;
 	}
 
 	public ProductListVO saveAll(List<Product> products) {
+		log.info("Product details are:" + products);
 		List<ProductVO> lists = new ArrayList<ProductVO>();
-		saveRepo.saveAll(products).forEach(product -> lists.add(new ProductVO(product)));
+//		saveRepo.saveAll(products).forEach(product -> lists.add(new ProductVO(product)));
+//		Map<String, Double> hashMap = new HashMap<String, Double>();
+//		for (ProductVO product : lists) {
+//			hashMap.put("price", product.getPrice());
+//			hashMap.put("product_id", Double.valueOf(product.getId()));
+//			hashMap.put("quantity", Double.valueOf(product.getQuantity() == 0.0 ? 100.0 : product.getQuantity()));
+//			sender.send(hashMap);
+//		}
+		products.forEach(product -> lists.add(save(new ProductVO(product))));
 		return new ProductListVO(lists);
 	}
 

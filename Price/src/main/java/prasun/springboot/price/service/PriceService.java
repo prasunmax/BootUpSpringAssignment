@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import prasun.springboot.price.VO.PriceListVO;
 import prasun.springboot.price.VO.PriceVO;
@@ -26,13 +27,13 @@ public class PriceService {
 	private PriceSearchRepository searchRepo;
 	@Value("${microservices.endpoints.endpoint.productCatalog.products}")
 	private String templateVal;
-	private RestTemplate template;
+	private ProductServiceProxy productServiceProxy;
 
 	@Autowired
-	public PriceService(PriceRepository saveRepo, PriceSearchRepository searchRepo, RestTemplate template) {
+	public PriceService(PriceRepository saveRepo, PriceSearchRepository searchRepo, ProductServiceProxy productServiceProxy) {
 		this.saveRepo = saveRepo;
 		this.searchRepo = searchRepo;
-		this.template = template;
+		this.productServiceProxy = productServiceProxy;
 	}
 
 	public PriceListVO findAll() {
@@ -48,21 +49,28 @@ public class PriceService {
 		return searchRepo.queryByPriceId(PriceId);
 	}
 
-	public PriceVO queryByPriceId(int PriceId) {
-		log.info("Finding by Price id" + PriceId);
-		return new PriceVO(searchRepo.queryByPriceId(PriceId));
+	public PriceVO queryByProductId(int productId) {
+		log.info("Finding by Price id" + productId);
+		Price price = null ;
+		try {
+			price =  searchRepo.queryByProductId(productId);
+		}catch(NoResultException nre) {
+			
+		}
+		if(null == price) {
+			// Check if the price is present in product, then add it in the Price table
+			//ProductVO product = template.getForObject(templateVal + "/" + productId, ProductVO.class);
+			ProductVO product = productServiceProxy.getProduct(productId);
+			price = new Price(product);
+			price = saveRepo.save(price);
+		}
+		return new PriceVO(price);
 	}
 
-	public PriceVO save(Price price) {
+	public PriceVO save(Price price) {	
 		Price priceTemp = searchRepo.queryByProductId(price.getProduct_id());
-		if (null != priceTemp) {
+		if (null != priceTemp)
 			price.set_id(priceTemp.get_id());
-		}
-		//Check if the product is present or not
-		ProductVO product = template.getForObject(templateVal + "/" + price.getProduct_id(), ProductVO.class);
-		if (null == product || null == product.getId()) {
-			return new PriceVO();
-		}
 		return new PriceVO(saveRepo.save(price));
 	}
 

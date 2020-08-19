@@ -35,9 +35,9 @@ public class PriceController {
 		return ResponseEntity.ok(PriceService.findAll());
 	}
 
-	@GetMapping("/{PriceId}")
-	public ResponseEntity<?> getPrices(@PathVariable int PriceId) {
-		return ResponseEntity.ok(PriceService.queryByPriceId(PriceId));
+	@GetMapping("/{ProductId}")
+	public ResponseEntity<?> getPrices(@PathVariable int ProductId) {
+		return ResponseEntity.ok(PriceService.queryByProductId(ProductId));
 	}
 
 	@PostMapping

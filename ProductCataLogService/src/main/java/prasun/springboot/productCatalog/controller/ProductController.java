@@ -61,7 +61,7 @@ public class ProductController {
 		if(result.hasErrors()) {
 			ResponseEntity.badRequest();
 		}
-		return ResponseEntity.ok(productService.save(product.getFromVO()));
+		return ResponseEntity.ok(productService.save(product));
 	}
 	
 	@PostMapping("/all")

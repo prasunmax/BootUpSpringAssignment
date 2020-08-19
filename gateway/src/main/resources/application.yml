@@ -14,3 +14,8 @@ hystrix:
       execution:
         timeout:
           enabled: false
+          
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false

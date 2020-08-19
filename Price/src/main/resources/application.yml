@@ -11,7 +11,7 @@ hibernate:
     mongodb:
       authentication_database: admin
 server:
-  port: 6000
+  port: 6001
 
 spring:
   application:
@@ -22,3 +22,9 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: ${EUREKA_SERVER:http://localhost:8002/eureka/}   
+      
+microservices:
+  endpoints:
+    endpoint:
+      productCatalog:
+        products: http://PRODUCT-CATALOG-SERVICE

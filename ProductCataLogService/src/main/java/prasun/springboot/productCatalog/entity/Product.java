@@ -21,6 +21,7 @@ public class Product extends GenericEntity{
 	private String description;
 	@Transient
 	private int quantity;
+	@Transient
 	private double price;
 	
 

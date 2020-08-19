@@ -25,7 +25,7 @@ public class Receiver {
 	@RabbitListener(queues = "ProductPriceQ")
 	public void processMessage(Map<String, Double> priceDetails) {
 		log.info("===========> ==== <===========");
-		log.info("The Price Details sent is:" + priceDetails);
+		log.info("The Price Details received is:" + priceDetails);
 		log.info("===========> ==== <===========");
 
 		priceService.save(priceDetails);

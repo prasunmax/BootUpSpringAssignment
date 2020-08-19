@@ -23,3 +23,7 @@ This should be at the last
 	<groupId>org.springframework.data</groupId>
 	<artifactId>spring-data-mongodb</artifactId>
 </dependency>
+
+
+Restart the docker 
+sudo systemctl restart docker
