@@ -1,0 +1,24 @@
+
+server:
+  port: 6002
+
+spring:
+  application:
+    name: cart-service
+  redis:
+    host: localhost
+    database: 0
+    port: 8001
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8002/eureka/}   
+      
+microservices:
+  endpoints:
+    endpoint:
+      productCatalog:
+        products: http://product-catalog-service
+        
