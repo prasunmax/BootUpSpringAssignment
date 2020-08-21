@@ -2,7 +2,7 @@ hibernate:
   ogm:
     datastore:
       create_database: true
-      database: priceAssignment
+      database: productAssignment
       host: localhost
       password: example
       port: 27017
@@ -11,20 +11,22 @@ hibernate:
     mongodb:
       authentication_database: admin
 server:
-  port: 6001
+  port: 6004
 
 spring:
   application:
-    name: price-service
+    name: order-service
+
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: ${EUREKA_SERVER:http://localhost:8002/eureka/}   
-      
+
 microservices:
   endpoints:
     endpoint:
       productCatalog:
-        products: "localhost:6000"
+        products: http://product-catalog-service

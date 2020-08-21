@@ -80,17 +80,22 @@ public class ProductService {
 		return new ProductListVO(lists);
 	}
 
-
 	public void save(Map<String, Double> productDetails) {
 		// If the product already exists then update it otherwise insert it
-		
+
 		Product product = getProductByProductId(productDetails.get("product_id").intValue());
-		if(null!=product) {
+		if (null != product) {
 			product.setPrice(productDetails.get("price"));
 			product.setQuantity(productDetails.get("quantity").intValue());
 		}
 		saveRepo.save(product);
 	}
 
-
+	public void saveOrderDetails(Map<String, Integer> productDetails) {
+		Product product = getProductByProductId(productDetails.get("product_id"));
+		if (null != product) {
+			product.setQuantity(product.getQuantity() - productDetails.get("quantity"));
+			saveRepo.save(product);
+		}
+	}
 }

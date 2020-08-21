@@ -80,8 +80,8 @@ services:
       - registry
       - rabbitmq
       - gateway
-    ports:
-      - 7000:8000
+    #ports:
+    #  - 7000:8000
     volumes:
       - ./ProductCataLogService/src:/app/src
   price:
@@ -99,6 +99,30 @@ services:
       - 7001:8000
     volumes:
       - ./Price/src:/app/src
+  cart:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./CartService 
+      dockerfile: Dockerfile.dev     
+    depends_on:
+      - mongo
+      - admin
+      - registry
+      - rabbitmq
+      - gateway
+    ports:
+      - 7002:8000
+    volumes:
+      - ./CartService/src:/app/src
+  order:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./OrderService 
+      dockerfile: Dockerfile.dev     
+    ports:
+      - 7003:8000
+    volumes:
+      - ./OrderService/src:/app/src
   front-end:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.

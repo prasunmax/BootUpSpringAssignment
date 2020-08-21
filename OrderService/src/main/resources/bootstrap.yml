@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    config:      
+      uri: http://config-server:8000
+  application:
+    name: order-service
+
+hibernate:
+  ogm:
+    datastore:
+      database: orderAssignment
+
+management:
+  security:
+    enabled: false 

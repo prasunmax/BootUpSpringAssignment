@@ -18,10 +18,13 @@ public class Receiver {
 	private ProductService productService;
 
 	@Bean
-	Queue queue() {
+	Queue PriceProductQ() {
 		return new Queue("PriceProductQ", false);
 	}
-
+	@Bean
+	Queue OrderProductQ() {
+		return new Queue("OrderProductQ", false);
+	}
 	@RabbitListener(queues = "PriceProductQ")
 	public void processMessage(Map<String, Double> productDetails) {
 		log.info("===========> ==== <===========");
@@ -29,5 +32,13 @@ public class Receiver {
 		log.info("===========> ==== <===========");
 
 		productService.save(productDetails);
+	}
+	@RabbitListener(queues = "OrderProductQ")
+	public void processOrderMessage(Map<String, Integer> productDetails) {
+		log.info("===========> ==== <===========");
+		log.info("The Product Details is asked for:" + productDetails);
+		log.info("===========> ==== <===========");
+
+		productService.saveOrderDetails(productDetails);
 	}
 }

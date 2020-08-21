@@ -1,11 +1,11 @@
-package prasun.springboot.price.service;
+package prasun.springboot.cart.service;
 
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import prasun.springboot.price.VO.ProductVO;
+import prasun.springboot.cart.VO.ProductVO;
 
 @FeignClient(name = "${microservices.endpoints.endpoint.productCatalog.products}")
 @RibbonClient
