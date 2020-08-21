@@ -66,8 +66,10 @@ public class PriceService {
 			// ProductVO product = template.getForObject(templateVal + "/" + productId,
 			// ProductVO.class);
 			ProductVO product = productServiceProxy.getProduct(productId);
-			price = new Price(product);
-			price = saveRepo.save(price);
+			if (null != product.getId()) {
+				price = new Price(product);
+				price = saveRepo.save(price);
+			}
 		}
 		return new PriceVO(price);
 	}

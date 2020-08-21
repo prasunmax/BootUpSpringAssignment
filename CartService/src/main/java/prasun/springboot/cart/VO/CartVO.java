@@ -3,10 +3,12 @@ package prasun.springboot.cart.VO;
 import java.util.List;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import prasun.springboot.cart.entity.Cart;
 import prasun.springboot.cart.entity.Item;
 
 @Data
+@NoArgsConstructor
 public class CartVO {
 
 	String name;

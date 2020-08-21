@@ -14,7 +14,7 @@ import prasun.springboot.cart.VO.CartVO;
 import prasun.springboot.cart.service.CartService;
 
 @RestController
-@RequestMapping("/api/checkout")
+@RequestMapping("/api/cart")
 @Slf4j
 public class CartController {
 

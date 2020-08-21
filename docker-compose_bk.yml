@@ -1,7 +1,5 @@
 # Use root/example as user/password credentials
 version: '3.1'
-volumes:
-    dbdata:
 
 services:
   redis:
@@ -17,8 +15,7 @@ services:
       - 27017:27017
     volumes:
       - ./Mongo/sampledata.archive.gz:/tmp/sampledata.archive.gz
-      #- ./Mongo/data:/data/db
-      - dbdata:/data/db
+      - ./Mongo/data:/data/db
     #command: bash -c "mongorestore --username root --password example --gzip --archive=/tmp/sampledata.archive.gz"      
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -63,15 +60,15 @@ services:
       - 8003:8000
     volumes:
       - ./gateway/src:/app/src
-#  admin:
-#    tty: true
-#    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
-#      context: ./admin 
-#      dockerfile: Dockerfile.dev     
-#    ports:
-#      - 8004:8000
-#    volumes:
-#      - ./admin/src:/app/src
+  admin:
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./admin 
+      dockerfile: Dockerfile.dev     
+    ports:
+      - 8004:8000
+    volumes:
+      - ./admin/src:/app/src
   product-catalog:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
@@ -79,9 +76,9 @@ services:
       dockerfile: Dockerfile.dev     
     depends_on:
       - mongo
-#      - admin
+      - admin
       - registry
-#      - rabbitmq
+      - rabbitmq
       - gateway
     #ports:
     #  - 7000:8000
@@ -94,9 +91,9 @@ services:
       dockerfile: Dockerfile.dev     
     depends_on:
       - mongo
-#      - admin
+      - admin
       - registry
-#      - rabbitmq
+      - rabbitmq
       - gateway
     ports:
       - 7001:8000
@@ -109,9 +106,9 @@ services:
       dockerfile: Dockerfile.dev     
     depends_on:
       - mongo
-#      - admin
+      - admin
       - registry
-#      - rabbitmq
+      - rabbitmq
       - gateway
     ports:
       - 7002:8000
@@ -132,7 +129,7 @@ services:
       context: ./front-end 
       dockerfile: Dockerfile.dev     
     depends_on:
-#      - admin
+      - admin
       - registry
       - gateway
     ports:
@@ -142,16 +139,16 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
-#  rabbitmq:
-#    image: rabbitmq:3-management-alpine
-#    container_name: rabbitmq
-#    volumes:
-#        - ./rabbitmq/etc/:/etc/rabbitmq/
-#        - ./rabbitmq/logs/:/var/log/rabbitmq/
-#    ports:
-#        - 5672:5672
-#        - 5671:5671
-#        - 25672:25672
-#        - 4369:4369
-#        - 15671:15671
-#        - 15672:15672
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    volumes:
+        - ./rabbitmq/etc/:/etc/rabbitmq/
+        - ./rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+        - 5672:5672
+        - 5671:5671
+        - 25672:25672
+        - 4369:4369
+        - 15671:15671
+        - 15672:15672

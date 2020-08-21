@@ -27,11 +27,13 @@ public class ProductVO {
 	private Integer quantity;
 
 	public ProductVO(Product product) {
-		this.id = product.get_id();
-		this.name = product.getName();
-		this.price = product.getPrice();
-		this.description = product.getDescription();
-		this.quantity = product.getQuantity();
+		if (null != product) {
+			this.id = product.get_id();
+			this.name = product.getName();
+			this.price = product.getPrice();
+			this.description = product.getDescription();
+			this.quantity = product.getQuantity();
+		}
 	}
 
 	@JsonIgnore
