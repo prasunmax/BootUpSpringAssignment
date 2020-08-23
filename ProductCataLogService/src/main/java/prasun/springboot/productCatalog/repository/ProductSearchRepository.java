@@ -13,25 +13,38 @@ import prasun.springboot.productCatalog.entity.Product;
 @Repository
 public class ProductSearchRepository {
 
-	private EntityManager entityManager;
+	private EntityManagerFactory entityManagerFactory;
 
 	@Autowired
 	public ProductSearchRepository(EntityManagerFactory entityManagerFactory) {
-		entityManager = entityManagerFactory.createEntityManager();
+		this.entityManagerFactory = entityManagerFactory;
 	}
 
 	public List<Product> findAll() {
-		return entityManager.createQuery("select p from Product p", Product.class).getResultList();
+		/*
+		 * Entity Manager at class level will create a level 1 caching and this service be distributed so will not help while saving, 
+		 * so have the entity-manager in local, get the details and close before leaving  
+		 */
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<Product> products = entityManager.createQuery("select p from Product p", Product.class).getResultList();
+		entityManager.close();
+		return products;
 	}
 
 	public Product queryByProductId(int productId) {
-		return entityManager.find(Product.class, productId);
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Product product = entityManager.find(Product.class, productId);
+		entityManager.close();
+		return product;
 	}
-	public List<Product> queryByProductsByName(String name) {
 
-		return entityManager.createQuery(
-				"select p from Product p where p.name like  %:name% ",
-				Product.class).setParameter("name", name).getResultList();
+	public List<Product> queryByProductsByName(String name) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<Product> products = entityManager
+				.createQuery("select p from Product p where p.name like  %:name% ", Product.class)
+				.setParameter("name", name).getResultList();
+		entityManager.close();
+		return products;
 	}
 
 }

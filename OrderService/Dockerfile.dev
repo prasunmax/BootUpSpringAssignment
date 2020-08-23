@@ -7,4 +7,12 @@ COPY ./mvnw ./mvnw
 RUN ./mvnw dependency:go-offline
 
 COPY src/ src/
-CMD ["./mvnw", "spring-boot:run","-Dmaven.test.skip=true"]
+#ENV JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=n
+ENV MAVEN_OPTS "-DJAVA_TOOL_OPTIONS='-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=n'"
+# "-e","JPDA_ADDRESS=*.8001","-e","JPDA_TRANSPORT=dt_socket",
+#ENV JPDA_ADDRESS=*.8001
+#ENV JPDA_TRANSPORT=dt_socket
+
+#RUN ./mvnw install -Dmaven.test.skip=true
+#RUN cp /root/.m2/repository/prasun/springboot/OrderService/0.0.1-SNAPSHOT/OrderService-0.0.1-SNAPSHOT.jar 
+ENTRYPOINT ["./mvnw", "spring-boot:run","-Dmaven.test.skip=true"]

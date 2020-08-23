@@ -122,10 +122,16 @@ services:
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
       context: ./OrderService 
       dockerfile: Dockerfile.dev     
+    environment:
+      JPDA_ADDRESS: "*.8001"
+      JPDA_TRANSPORT: dt_socket
+      #JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=n"
     ports:
       - 7003:8000
+      - 7004:8001
     volumes:
       - ./OrderService/src:/app/src
+      - ./logs:/app/logs
   front-end:
     tty: true
     build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.

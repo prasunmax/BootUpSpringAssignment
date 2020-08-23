@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
-import prasun.springboot.Order.VO.OrderListVO;
-import prasun.springboot.Order.VO.OrderVO;
 import prasun.springboot.order.VO.CartVO;
+import prasun.springboot.order.VO.OrderInputVO;
+import prasun.springboot.order.VO.OrderListVO;
+import prasun.springboot.order.VO.OrderVO;
 import prasun.springboot.order.entity.Order;
 import prasun.springboot.order.repository.OrderRepository;
 import prasun.springboot.order.repository.OrderSearchRepository;
@@ -23,17 +23,16 @@ public class OrderService {
 
 	private OrderRepository saveRepo;
 	private OrderSearchRepository searchRepo;
-	@Value("${microservices.endpoints.endpoint.productCatalog.products}")
-	private String templateVal;
 	private SenderService sender;
-	
+	private CartServiceProxy cartServiceProxy;
 
 	@Autowired
-	public OrderService(OrderRepository saveRepo, OrderSearchRepository searchRepo,
-			ProductServiceProxy productServiceProxy, SenderService sender) {
+	public OrderService(OrderRepository saveRepo, OrderSearchRepository searchRepo, SenderService sender,
+			CartServiceProxy cartServiceProxy) {
 		this.saveRepo = saveRepo;
 		this.searchRepo = searchRepo;
 		this.sender = sender;
+		this.cartServiceProxy = cartServiceProxy;
 	}
 
 	public OrderListVO findAll() {
@@ -58,18 +57,29 @@ public class OrderService {
 		return listVo;
 	}
 
-	public OrderVO save(Order Order) {
-		//Payment service Call to be implemented
-		
-		OrderVO Ordervo = new OrderVO(saveRepo.save(Order));
-		//Order saved 
-		Ordervo.getOrderItems().forEach(item -> {
-			Map<String, Double> hashMap = new HashMap<String, Double>();
-			hashMap.put("product_id", Double.valueOf(item.getProduct_id()));
-			hashMap.put("quantity", Double.valueOf(item.getQuantity()));
-			sender.send(hashMap);
+	public OrderVO save(OrderInputVO order) {
+		// Payment service Call to be implemented
+		CartVO cartOrder = cartServiceProxy.getCartDetails(order.getName());
+		log.info("Got the following from Cart:" + cartOrder);
+		if (null == cartOrder || null == cartOrder.getName()) {
+			return new OrderVO();
+		}
+		OrderVO ordervo = new OrderVO(cartOrder);
+		ordervo.setAddress(order.getAddress());
+		log.info("Order before saving" + ordervo);
+		ordervo = new OrderVO(saveRepo.save(ordervo.getOrder()));
+		// Order saved now update Product
+		ordervo.getOrderItems().forEach(item -> {
+			Map<String, Integer> hashMap = new HashMap<String, Integer>();
+			hashMap.put("product_id", item.getProduct_id());
+			hashMap.put("quantity", item.getQuantity());
+			sender.sendToProduct(hashMap);
 		});
-		return new OrderVO(saveRepo.save(Order));
+		//Remove the user details from the cart, this can be made more dynamic
+		Map<String, String> cartMap = new HashMap<String, String>();
+		cartMap.put("user", order.getName());
+		sender.sendToCart(cartMap);
+		return ordervo;
 	}
 
 }

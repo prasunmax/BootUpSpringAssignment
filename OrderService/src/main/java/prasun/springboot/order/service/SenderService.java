@@ -11,13 +11,22 @@ public class SenderService {
 	@Autowired
 	private RabbitMessagingTemplate template;
 	
-	@Bean("SenderQueue")
-	Queue queue() {
+	@Bean
+	Queue orderProductQ() {
 		return new Queue("OrderProductQ", false);
 	}
 	
-	public void send(Object map){
+	@Bean
+	Queue orderCartQ() {
+		return new Queue("OrderCartQ", false);
+	}
+	
+	public void sendToProduct(Object map){
 		template.convertAndSend("OrderProductQ", map);
+	}
+	
+	public void sendToCart(Object map){
+		template.convertAndSend("OrderCartQ", map);
 	}
 
 }

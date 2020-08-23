@@ -13,9 +13,11 @@ public class CartVO {
 
 	String name;
 	private List<Item> items;
-	
+
 	public CartVO(Cart cart) {
-		this.name = cart.getId();
-		this.items.addAll(cart.getItems());
+		if (null != cart) {
+			this.name = cart.getId();
+			this.items = cart.getItems();
+		}
 	}
 }

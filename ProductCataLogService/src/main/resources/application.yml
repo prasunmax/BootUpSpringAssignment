@@ -1,4 +1,6 @@
 hibernate:
+  cache:
+    use_second_level_cache: false
   ogm:
     datastore:
       create_database: true
@@ -24,3 +26,5 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: ${EUREKA_SERVER:http://localhost:8002/eureka/}   
+
+

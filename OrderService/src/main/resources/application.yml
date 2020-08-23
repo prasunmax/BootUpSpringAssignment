@@ -2,7 +2,7 @@ hibernate:
   ogm:
     datastore:
       create_database: true
-      database: productAssignment
+      database: orderAssignment
       host: localhost
       password: example
       port: 27017
@@ -28,5 +28,7 @@ eureka:
 microservices:
   endpoints:
     endpoint:
+      cart:
+        cart: cart-service
       productCatalog:
-        products: http://product-catalog-service
+        products: product-catalog-service

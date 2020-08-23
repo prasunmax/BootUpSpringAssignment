@@ -1,4 +1,4 @@
-package prasun.springboot.Order.VO;
+package prasun.springboot.order.VO;
 
 import java.util.List;
 
