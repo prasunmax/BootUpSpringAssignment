@@ -53,7 +53,7 @@ public class CartService {
 				if (item1.getId() == item.getId()) {
 					// Add quantity for similar items
 					item1.setQuantity(item.getQuantity() + item1.getQuantity());
-					item1.setPrice(item.getPrice() + item1.getPrice());
+					item1.setPrice(item.getPrice() * item.getQuantity() + item1.getPrice());
 					wrapper.found = true;
 				}
 			});
@@ -64,7 +64,7 @@ public class CartService {
 				if (null != productVO) {
 					item.setName(productVO.getName());
 					item.setDescription(productVO.getDescription());
-					item.setPrice(productVO.getPrice());
+					item.setPrice(productVO.getPrice() * item.getQuantity());
 				}
 
 				existingCart.getItems().add(item);

@@ -1,17 +1,23 @@
+import { createBrowserHistory } from 'history';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import Header from './Header';
+import Products from './product';
+import Cart from './Cart';
 
+
+//ReactDOM.render(<App />, document.getElementById('root'));
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+<Router history={createBrowserHistory()} >
+    <Switch>
+        {/* <Route exact path="/" component={App}/> */}
+        {/* <Route path="/products" component={Products}/> */}
+        <Route exact path='/' render={() => <Header> <App /> </Header>} />
+        <Route exact path='/products' render={() => <Header> <Products /> </Header>} />
+        <Route exact path='/cart' render={() => <Header> <Cart /> </Header>} />
+    </Switch>
+</Router>
+ , document.getElementById('root'));
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

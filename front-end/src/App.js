@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'; //Optional component
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    state = { displayExtends: false };
+    // constructor() {
+    //     super();
+    //     this.state = { displayExtends: false };
+    //     this.toggle = this.toggle.bind(this);
+    // }
+    toggle = () => {
+        this.setState({ displayExtends: !this.state.displayExtends });
+    }
+    render() {
+
+        return <div>
+            <h1>Hello!</h1>
+            <p>This is for testing only we will soon integrate with the backend api</p>
+            {
+                this.state.displayExtends ? (
+                    <div>
+                        <p>Putting more detals in the application</p>
+                        <button onClick={this.toggle}>Show Less</button>
+                    </div>
+                ) : (<div>
+                    <button onClick={this.toggle}>Read More</button>
+                </div>)
+            }
+            <hr />
+            
+        </div>
+    }
 }
+
+
 
 export default App;
