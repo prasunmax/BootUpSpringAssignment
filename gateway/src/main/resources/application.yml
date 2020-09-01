@@ -6,7 +6,10 @@ server:
 spring:
   application:
     name: gateway-service
-   
+  mongodb:
+    uri: mongodb://root:example@192.168.1.7/assignment_user?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false&maxPoolSize=50&connectTimeoutMS=2000
+    database: userAssignment
+       
 #hystrix.command.default.execution.timeout.enabled
 hystrix:
   command:
@@ -19,3 +22,10 @@ eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
+
+
+jwtSecret: "@@@@@THIS_IS_THE_SECRET_KEY@@@@@$$$$$$$$$$$$%%%%%%%%%%%%%%%%@@@@@@@@@@@@@"
+jwtExpirationInMs: 604800000
+jwtIteration: 33
+jwtKeyLength: 256
+

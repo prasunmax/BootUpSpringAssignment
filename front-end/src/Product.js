@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+
+
+import AddProduct from './AddProduct';
+
 // const Product = ({product}) => {
 //     const { id, name, description, price, quatity } = product;
 //     return (
@@ -12,23 +16,17 @@ import React, { Component } from 'react';
 //         </div>
 //     )
 // }
-let rows = [{
-    'description': 'Description',
-    'id': 'id',
-    'name': 'Name',
-    'price': 'Price',
-    'quantity': 'Quantity',
-}];
-const Product = ({ product: { id, name, description, price, quatity }, clickFunction }) =>
+
+const Product = ({ product: { id, name, description, price, quantity }, clickFunction }) =>
     (
-        <div className="card" style={{ display: 'inline-block', width: 300 }}>
+        <div className="card" style={{ display: 'inline-block' }}>
             <div className="card-header">
                 <h3>{name}</h3>
             </div>
             <div className="card-body">
-                <p style={{ nowrap: 'nowrap' }}>{description}</p>
-                <p>{price}</p>
-                <p>{quatity}</p>
+                <p style={{ nowrap: 'nowrap' }}>Name: {description}</p>
+                <p>Price: {price}</p>
+                <p>Quantity: {quantity}</p>
                 <button className="btn btn-primary" onClick={() => clickFunction(id)}>Add One Item</button>
             </div>
         </div>
@@ -38,6 +36,9 @@ class Products extends Component {
     state = { name: "Prasun", products: [] };
 
     componentDidMount() {
+        this.updateProducts();
+    }
+    updateProducts = () =>{
         fetch("/api/products")
             .then(response => response.json())
             .then(json => {
@@ -45,8 +46,6 @@ class Products extends Component {
             })
             .catch(error => console.log(error));
 
-        console.log(this.state.products);
-        //.then(json => this.setState({'products':json}));
     }
     sendValuesToCart = (id) => {
         console.log(id);
@@ -68,12 +67,14 @@ class Products extends Component {
     }
     render() {
         return (
-            <div>
+            <>
+                <AddProduct clickFunction={this.updateProducts}/>
+                <br />
                 {this.state.products ? this.state.products.map(product => (
                     <Product key={product.id} product={product} clickFunction={this.sendValuesToCart} />
                 )) : null
                 }
-            </div>
+            </>
         )
     }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import OrderCart from './OrderCart';
 const CartProduct = ({ product: { id, name, description, price, quantity } }) => {
     // changeHandler= (e) =>{
     //     if (typeof this.props.onChange === 'function') {
@@ -43,6 +44,8 @@ class Cart extends Component {
                     <CartProduct key={product.id} product={product} />
                 )) : null
                 }
+                <br/>
+                <OrderCart />
             </div>
         )
     }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Address {
 	String firstName;
-	String lastname;
+	String lastName;
 	long mobileNumber;
 	String email;
 }
