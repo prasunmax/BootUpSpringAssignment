@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+
+
+export const FlashContext = React.createContext();
 
 const Header = ({ children }) => {
-
+    const [auth, setAuth] = useState({});
     return (
         <>
             <Navbar bg="dark" variant="dark" expand="lg">
@@ -24,7 +27,9 @@ const Header = ({ children }) => {
 
                 </Navbar.Collapse>
             </Navbar>
-            {children}
+            <FlashContext.Provider value={{ auth, setAuth }}>
+                    {children}
+            </FlashContext.Provider>
         </>
     );
 }

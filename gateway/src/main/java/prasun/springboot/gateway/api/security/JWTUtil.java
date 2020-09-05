@@ -20,7 +20,7 @@ import prasun.springboot.gateway.entity.UserPrincipal;
 @Configuration
 public class JWTUtil {
 	
-//	private final String TOKEN_PREFIX = "Bearer";
+	private final String TOKEN_PREFIX = "Bearer ";
 //  private final String HEADER_STRING = "Authorization";
 	@Value("${jwtSecret}")
 	private String secret;
@@ -65,7 +65,7 @@ public class JWTUtil {
 		final Date createdDate = new Date();
 		final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 1000);
 
-		return Jwts.builder()
+		return TOKEN_PREFIX + Jwts.builder()
 				.setClaims(claims)
 				.setSubject(username)
 				.setIssuedAt(createdDate)

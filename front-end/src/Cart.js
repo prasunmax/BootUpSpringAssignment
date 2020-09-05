@@ -22,10 +22,19 @@ const CartProduct = ({ product: { id, name, description, price, quantity } }) =>
 }
 
 class Cart extends Component {
-    state = { name: "Prasun", totalPrice: 0.0, products: [] };
+    state = { name: "Prasun", totalPrice: 0.0, products: [] ,userToken: localStorage.getItem("userToken")};
 
     componentDidMount() {
-        fetch("/api/cart/" + this.state.name)
+        this.getCart();
+    }
+
+    getCart = () => {
+        fetch("/api/cart/" + this.state.name, {
+            headers: {
+                "Authorization": this.state.userToken
+                //"Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjpbXSwic3ViIjoiYWJjQHh5ei5jb20iLCJpYXQiOjE1OTkxMTg5MDksImV4cCI6MjIwMzkxODkwOX0.SYu-o9pwlujr8L4PJ4iyfUPiK4wZDrEC7H2H25JXbu0kvW_1OmFTQxuu3ROeNNseR81sjhtbtwTvOXfFG5HjbA"
+            }
+        })
             .then(response => response.json())
             .then(json => {
                 this.setState({ products: json.items, totalPrice: json.totalAmount }); console.log(this.state.products);
@@ -33,8 +42,8 @@ class Cart extends Component {
             .catch(error => console.log(error));
 
         console.log(this.state.products);
-        //.then(json => this.setState({'products':json}));
     }
+
     render() {
         return (
             <div>
@@ -44,8 +53,8 @@ class Cart extends Component {
                     <CartProduct key={product.id} product={product} />
                 )) : null
                 }
-                <br/>
-                <OrderCart />
+                <br />
+                <OrderCart clickFunction={this.getCart}/>
             </div>
         )
     }

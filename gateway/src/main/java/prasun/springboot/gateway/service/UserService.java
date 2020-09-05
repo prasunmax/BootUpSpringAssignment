@@ -5,24 +5,23 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import prasun.springboot.gateway.api.security.JWTUtil;
 import prasun.springboot.gateway.dao.IncorrectDaoOperation;
 import prasun.springboot.gateway.dao.UserDao;
 import prasun.springboot.gateway.entity.User;
 import prasun.springboot.gateway.entity.UserPrincipal;
 import prasun.springboot.gateway.entity.UserRegistry;
-import reactor.core.publisher.Mono;
 
 @Service
 @Configuration
+@Slf4j
 public class UserService implements UserDetailsService {
 
 	@Autowired
@@ -90,13 +89,12 @@ public class UserService implements UserDetailsService {
 	}
 
 	private String generateUserToken(String email, String password) {
-		//Lets first authenticate the user and generate token
-		UserDetails userDetails= loadUserByUsername(email);
-		if(!passwordEncoder.matches(password, userDetails.getPassword())) {
+		// Lets first authenticate the user and generate token
+		UserDetails userDetails = loadUserByUsername(email);
+		if (!passwordEncoder.matches(password, userDetails.getPassword())) {
 			throw new RuntimeException();
 		}
-		
-		
+
 		return util.generateToken((UserPrincipal) userDetails);
 	}
 
@@ -177,13 +175,15 @@ public class UserService implements UserDetailsService {
 		}
 		return false;
 	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = loadUser(username);
+		log.info("UserName passed is:" + username);
 		if (user == null || user.isEmpty()) {
 			throw new UsernameNotFoundException("Cannot find username.");
 		}
 		return UserPrincipal.create(user);
 	}
-	
+
 }
