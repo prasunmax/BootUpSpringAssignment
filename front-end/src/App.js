@@ -17,7 +17,7 @@ class App extends Component {
             email: '',
             password: '',
             token: '',
-            userToken: '',
+            userToken: localStorage.getItem("userToken"),
             displayExtends: false,
             validated: false,
             error: {
@@ -29,7 +29,7 @@ class App extends Component {
     componentDidMount() {
         //const { auth, setAuth } = this.context;
 
-        console.log("token" + this.state.token);
+        console.log("token" + this.state.userToken);
 
         //[this.userToken, this.setUserToken] = useState(localStorage.getItem("userToken"));
 
@@ -67,13 +67,9 @@ class App extends Component {
                 }
             }).then(response => response.json())
                 .then(json => {
-                    this.context.setAuth({
-                        token: json.auth_token, name: json.info.name,
-                        email: json.info.email
-                    });
                     this.setState({userToken: json.auth_token});
                     localStorage.setItem("userToken", json.auth_token);
-                    console.log("Getting the details from the auth ", this.context.auth);
+                    console.log("Getting the details from the auth ", json.auth_token);
                 }).catch(error => console.log(error));
         }
     };
