@@ -1,40 +1,15 @@
 import React, { Component } from 'react';
-import { FlashContext } from './Header';
 
 
 import AddProduct from './AddProduct';
 
-// const Product = ({product}) => {
-//     const { id, name, description, price, quatity } = product;
-//     return (
-//         <div style={{ display: 'inline-block', width: 300 }}>
-//             <input type="hidden" value={id} />
-//             <h3>{name}</h3>
-//             <p>{description}</p>
-//             <p>{price}</p>
-//             <p>{quatity}</p>
-//         </div>
-//     )
-// }
+import {Product} from '../components/showProduct';
 
-const Product = ({ product: { id, name, description, price, quantity }, clickFunction }) =>
-    (
-        <div className="card" style={{ display: 'inline-block' }}>
-            <div className="card-header">
-                <h3>{name}</h3>
-            </div>
-            <div className="card-body">
-                <p style={{ nowrap: 'nowrap' }}>Name: {description}</p>
-                <p>Price: {price}</p>
-                <p>Quantity: {quantity}</p>
-                <button className="btn btn-primary" onClick={() => clickFunction(id, price)}>Add One Item</button>
-            </div>
-        </div>
-    )
+import '../components/showProduct.css';
 
 class Products extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             name: "Prasun",
             products: [],
@@ -43,20 +18,15 @@ class Products extends Component {
         //setState({userToken:localStorage.getItem("userToken")});
     }
 
-
-    static contextType = FlashContext;
-
     componentDidMount() {
         this.updateProducts();
     }
     updateProducts = () => {
-        //const [userToken, setUserToken] = useState(localStorage.getItem("userToken"));
         console.log("userToken:" + this.state.userToken)
         console.log(this.context.auth);
         fetch("/api/products", {
             headers: {
                 "Authorization": this.state.userToken
-                //"Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjpbXSwic3ViIjoiYWJjQHh5ei5jb20iLCJpYXQiOjE1OTkxMTg5MDksImV4cCI6MjIwMzkxODkwOX0.SYu-o9pwlujr8L4PJ4iyfUPiK4wZDrEC7H2H25JXbu0kvW_1OmFTQxuu3ROeNNseR81sjhtbtwTvOXfFG5HjbA"
             }
         })
             .then(response => response.json())
@@ -64,7 +34,6 @@ class Products extends Component {
                 this.setState({ products: json.products }); console.log(this.state.products);
             })
             .catch(error => console.log(error));
-
     }
     sendValuesToCart = (id, price) => {
         console.log(id);

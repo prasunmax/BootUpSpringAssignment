@@ -58,7 +58,13 @@ services:
 #    volumes:
 #      - ./admin/src:/app/src
   product-catalog:
-    image: prasunmax/product-catalog
+    #image: prasunmax/product-catalog:v1
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./product-catalog 
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./product-catalog/src:/app/src  
     depends_on:
       - mongo
 #      - admin
@@ -67,6 +73,12 @@ services:
       - gateway
   price:
     image: prasunmax/price
+    # tty: true
+    # build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+    #   context: ./price 
+    #   dockerfile: Dockerfile.dev
+    # volumes:
+    #   - ./price/src:/app/src  
     depends_on:
       - mongo
 #      - admin
@@ -85,7 +97,13 @@ services:
     ports:
       - 7002:8000
   order:
-    image: prasunmax/order
+    #image: prasunmax/order
+    tty: true
+    build:                #Add to adjust the error: Service api has neither an image nor a build context specified. At least one must be provided.
+      context: ./order 
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./order/src:/app/src  
     environment:
       JPDA_ADDRESS: "*.8001"
       JPDA_TRANSPORT: dt_socket

@@ -6,7 +6,7 @@ import Table from 'react-bootstrap/Table'
 
 
 export default class AddProduct extends Component {
-  state = { show: false, name: "", description: "", quantity: 0, price: 0.0 };
+  state = { show: false, name: "", description: "", quantity: 0, price: 0.0,  userToken: localStorage.getItem("userToken") };
 
   ex = /^[0-9]*$/;
   setShow = (val) => { this.setState({ show: val }); }
@@ -55,7 +55,8 @@ export default class AddProduct extends Component {
         "quantity": this.state.quantity
       }),
       headers: {
-        "Content-type": "application/json; charset=UTF-8"
+        "Content-type": "application/json; charset=UTF-8",
+        "Authorization": this.state.userToken
       }
     })
       .then(response => {

@@ -1,12 +1,12 @@
 import { createBrowserHistory } from 'history';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import App from './App';
 import Header from './Header';
-import Products from './Product';
-import Cart from './Cart';
-import Order from './Order';
+import Products from './product/Product';
+import Cart from './cart/Cart';
+import Order from './order/Order';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { createStore } from 'redux';
@@ -21,7 +21,7 @@ ReactDOM.render(
     <div className="container">
         <Provider store={store}>
 
-            <Router history={createBrowserHistory()} >
+            <BrowserRouter history={createBrowserHistory()} >
                 <Switch>
                     {/* <Route exact path="/" component={App}/> */}
                     {/* <Route path="/products" component={Products}/> */}
@@ -30,7 +30,7 @@ ReactDOM.render(
                     <Route exact path='/cart' render={() => <Header> <Cart /> </Header>} />
                     <Route exact path='/order' render={() => <Header> <Order /> </Header>} />
                 </Switch>
-            </Router>
+            </BrowserRouter>
         </Provider>
     </div>
     , document.getElementById('root'));

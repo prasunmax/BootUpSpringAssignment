@@ -25,5 +25,8 @@ This should be at the last
 </dependency>
 
 
-Restart the docker 
-sudo systemctl restart docker
+--Restart the docker 
+--sudo systemctl restart docker
+
+
+--Get the classpath in pom ---> mvn dependency:build-classpath -Dmdep.outputFile=cp.txt

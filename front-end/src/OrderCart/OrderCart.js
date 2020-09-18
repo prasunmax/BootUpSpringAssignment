@@ -2,25 +2,24 @@ import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-//import { useHistory } from "react-router-dom";
-
-
 
 import { withRouter } from 'react-router-dom';
 
 
-
 class OrderCart extends Component {
-  state = {
-    show: false,
-    name: "Prasun",
-    firstName: "",
-    lastName: "",
-    mobileNumber: 0,
-    email: "",
-    redirect: false,
-    userToken: localStorage.getItem("userToken")
-  };
+  constructor(props){
+    super();
+    this.state = {
+      show: false,
+      name: "Prasun",
+      firstName: "",
+      lastName: "",
+      mobileNumber: 0,
+      email: "",
+      redirect: false,
+      userToken: localStorage.getItem("userToken")
+    } ;
+  }
   componentDidMount() {
      
   }
@@ -44,7 +43,6 @@ class OrderCart extends Component {
   }
 
   addOrder = () => {
-    //    let history = useHistory();
     fetch("/api/order", {
       method: "POST",
       body: JSON.stringify({
@@ -58,26 +56,14 @@ class OrderCart extends Component {
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
-        //"Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjpbXSwic3ViIjoiYWJjQHh5ei5jb20iLCJpYXQiOjE1OTkxMTg5MDksImV4cCI6MjIwMzkxODkwOX0.SYu-o9pwlujr8L4PJ4iyfUPiK4wZDrEC7H2H25JXbu0kvW_1OmFTQxuu3ROeNNseR81sjhtbtwTvOXfFG5HjbA"
         "Authorization": this.state.userToken
       }
     })
       .then(response => {
-        //Ordered show orer page
-        //this.props.history.push('/order');
-        // const { history } = this.props;
-        // if(history) history.push('/order');
-        //this.setState({ redirect: true })
         this.props.clickFunction();
         this.handleClose();
       })
       .catch(error => console.log(error));
-    // const { history } = this.props;
-    // if (history) history.push('/order');
-    //this.props.history.push('/order');
-    //this.history.push('/order');
-
-    //this.props.dispatch(push('/order'));
   }
 
   render() {

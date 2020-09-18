@@ -1,34 +1,19 @@
 import React, { Component } from 'react';
-import OrderCart from './OrderCart';
-const CartProduct = ({ product: { id, name, description, price, quantity } }) => {
-    // changeHandler= (e) =>{
-    //     if (typeof this.props.onChange === 'function') {
-    //         this.props.onChange(e.target.value);
-    //     }
-    // }
-    return (
-        <div className="card" style={{ display: 'inline-block', width: 300 }}>
-            <input type="hidden" value={id} />
-            <div className="card-header">
-                <h3>{name}</h3>
-            </div>
-            <div className="card-body">
-                <p>Description: {description}</p>
-                <p>Price: {price}</p>
-                <p>Quantity: {quantity}</p>
-            </div>
-        </div>
-    )
-}
+import OrderCart from '../OrderCart/OrderCart';
+
+import {Product} from '../components/showProduct';
+import '../components/showProduct.css';
 
 class Cart extends Component {
     state = { name: "Prasun", totalPrice: 0.0, products: [] ,userToken: localStorage.getItem("userToken")};
 
     componentDidMount() {
         this.getCart();
+        console.log(this.props);
     }
 
     getCart = () => {
+        console.log("userToken:" + this.state.userToken)
         fetch("/api/cart/" + this.state.name, {
             headers: {
                 "Authorization": this.state.userToken
@@ -40,7 +25,7 @@ class Cart extends Component {
                 this.setState({ products: json.items, totalPrice: json.totalAmount }); console.log(this.state.products);
             })
             .catch(error => console.log(error));
-
+        
         console.log(this.state.products);
     }
 
@@ -50,7 +35,7 @@ class Cart extends Component {
                 <p>Name:{this.state.name}</p>
                 <p>Total Price:{this.state.totalPrice}</p>
                 {this.state.products ? this.state.products.map(product => (
-                    <CartProduct key={product.id} product={product} />
+                    <Product key={product.id} product={product} />
                 )) : null
                 }
                 <br />

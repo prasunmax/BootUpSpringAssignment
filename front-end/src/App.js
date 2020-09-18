@@ -12,7 +12,7 @@ import { logUser } from './actions';
 class App extends Component {
 
     constructor(props) {
-        super(props);
+        super();
         this.state = {
             email: '',
             password: '',
@@ -30,14 +30,17 @@ class App extends Component {
         //const { auth, setAuth } = this.context;
 
         console.log("token" + this.state.userToken);
+        console.log("Props", this.props);
 
         //[this.userToken, this.setUserToken] = useState(localStorage.getItem("userToken"));
 
     }
-    logUser() {
+    logUser = () => {
         const { email, token } = this.state;
-        console.log("this.props", this.props)
         this.props.logUser(email, token);
+        console.log("email", email);
+        console.log("token", token);
+        console.log("this.props", this.props);
     }
     //https://www.taniarascia.com/using-context-api-in-react/
     // constructor() {
@@ -67,8 +70,9 @@ class App extends Component {
                 }
             }).then(response => response.json())
                 .then(json => {
-                    this.setState({userToken: json.auth_token});
+                    this.setState({ userToken: json.auth_token });
                     localStorage.setItem("userToken", json.auth_token);
+                    this.setState({ token: json.auth_token }, () => this.logUser());
                     console.log("Getting the details from the auth ", json.auth_token);
                 }).catch(error => console.log(error));
         }

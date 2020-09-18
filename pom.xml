@@ -23,14 +23,14 @@
 	</properties>
 
 	<modules>
-		<module>config-server</module>
-		<module>gateway</module>
-		<module>order</module>
-		<module>price</module>
-		<module>product-catalog</module>
-		<module>registry</module>
-		<module>cart</module>
 		<module>admin</module>
+		<module>registry</module>
+		<module>config-server</module>
+		<module>cart</module>
+		<module>gateway</module>
+		<module>price</module>
+		<!-- <module>order</module>
+		<module>product-catalog</module> -->
 	</modules>
 
 	<dependencies>
@@ -60,6 +60,15 @@
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

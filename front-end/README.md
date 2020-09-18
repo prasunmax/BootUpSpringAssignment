@@ -72,3 +72,7 @@ https://mherman.org/blog/dockerizing-a-react-app/
 
 ### Create react app
 npx create-react-app front-end
+
+
+
+https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
